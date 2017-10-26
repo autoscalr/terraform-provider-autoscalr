@@ -18,7 +18,7 @@ func TestAccAutoScalr_autoscaling_group(t *testing.T) {
 				Config: testAsrConfig,
 				Check: resource.ComposeTestCheckFunc(
 					testAsrAsgExists("autoscalr_autoscaling_group.myApp"),
-					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "aws_autoscaling_group_name", "JaysASG"),
+					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "aws_autoscaling_group_name", "testASG"),
 					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "aws_region", "us-east-1"),
 					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "scale_mode", "cpu"),
 					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "autoscalr_enabled", "false"),
@@ -29,7 +29,7 @@ func TestAccAutoScalr_autoscaling_group(t *testing.T) {
 				Config: testAsrConfigUpdated,
 				Check: resource.ComposeTestCheckFunc(
 					testAsrAsgExists("autoscalr_autoscaling_group.myApp"),
-					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "aws_autoscaling_group_name", "JaysASG"),
+					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "aws_autoscaling_group_name", "testASG"),
 					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "aws_region", "us-east-1"),
 					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "scale_mode", "cpu"),
 					resource.TestCheckResourceAttr("autoscalr_autoscaling_group.myApp", "autoscalr_enabled", "false"),
@@ -44,8 +44,8 @@ func TestAccAutoScalr_autoscaling_group(t *testing.T) {
 const testAsrConfig = `
 resource "autoscalr_autoscaling_group" "myApp" {
   aws_region = "us-east-1"
-  aws_autoscaling_group_name = "JaysASG"
-  display_name = "JaysASG"
+  aws_autoscaling_group_name = "testASG"
+  display_name = "testASG"
   instance_types = ["t1.micro", "m1.medium"]
   scale_mode = "cpu"
   autoscalr_enabled = false
@@ -55,8 +55,8 @@ resource "autoscalr_autoscaling_group" "myApp" {
 const testAsrConfigUpdated = `
 resource "autoscalr_autoscaling_group" "myApp" {
   aws_region = "us-east-1"
-  aws_autoscaling_group_name = "JaysASG"
-  display_name = "JaysASG"
+  aws_autoscaling_group_name = "testASG"
+  display_name = "testASG"
   instance_types = ["t1.micro", "m1.medium"]
   scale_mode = "cpu"
   autoscalr_enabled = false

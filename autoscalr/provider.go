@@ -41,7 +41,7 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	}
 
 	config := Config{
-		apiUrl:    "http://127.0.0.1:3002/api/autoScalrApp",
+		apiUrl:    "https://app.autoscalr.com/api/autoScalrApp",
 		AccessKey: api_key,
 	}
 
