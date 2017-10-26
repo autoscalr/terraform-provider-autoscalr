@@ -52,7 +52,8 @@ provider "autoscalr" {
 }
 ```
 
-If you do not know what your API key value is for your account contact, support@autoscalr.com.
+If you do not know what your API key value is for your AutoScalr account contact, support@autoscalr.com.
+If you do not have an AutoScalr account, you can sign up for free trial at: http://autoscalr.com/get-started/
 
 The exampleUse.tf file shows how to use the autoscalr provider to extend an AWS autoscaling group:
 
