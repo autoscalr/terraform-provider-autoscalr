@@ -1,4 +1,4 @@
-Terraform AutoScalr Provider
+AutoScalr Terraform Provider
 =========================
 
 - Website: https://www.autoscalr.com
