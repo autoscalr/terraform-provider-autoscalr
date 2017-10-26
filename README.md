@@ -101,7 +101,7 @@ resource "autoscalr_autoscaling_group" "asr4myAppASG" {
 }
 ```
 
-If you copy this file to your Terraform workspace that has the plugin installed and set your AUTOSCLAR_API_KEY via environment
+If you copy this file to your Terraform workspace that has the plugin installed and set your AUTOSCALR_API_KEY via environment
 variable or parameter, you should be able to build the simple example stack by:
 
  ```sh
