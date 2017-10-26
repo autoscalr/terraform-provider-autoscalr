@@ -2,8 +2,8 @@ provider "aws" {
   region = "us-east-1"
 }
 provider "autoscalr" {
-  // You either need to specify the api_key here or via the AUTOSCLAR_API_KEY enviroment variable
-  //api_key = "yourKey"
+  // You either need to specify the api_key here or via the AUTOSCALR_API_KEY enviroment variable
+  // api_key = "yourKey"
 }
 
 resource "aws_launch_configuration" "test_lc" {

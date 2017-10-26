@@ -52,7 +52,7 @@ provider "autoscalr" {
 }
 ```
 
-If you do not know what your API key value is for your account contact support@autoscalr.com.
+If you do not know what your API key value is for your account contact, support@autoscalr.com.
 
 The exampleUse.tf file shows how to use the autoscalr provider to extend an AWS autoscaling group:
 
@@ -61,7 +61,7 @@ provider "aws" {
   region = "us-east-1"
 }
 provider "autoscalr" {
-  // You either need to specify the api_key here or via the AUTOSCLAR_API_KEY enviroment variable
+  // You either need to specify the api_key here or via the AUTOSCALR_API_KEY enviroment variable
   //api_key = "yourKey"
 }
 
