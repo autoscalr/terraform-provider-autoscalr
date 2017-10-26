@@ -12,7 +12,13 @@ Requirements
 Building The Provider
 ---------------------
 
-Clone repository to: `$GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr`
+Clone repository to: `$GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr` by either:
+
+```sh
+$ go get github.com/autoscalr/terraform-provider-autoscalr
+```
+
+or
 
 ```sh
 $ git clone git@github.com:autoscalr/terraform-provider-autoscalr $GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr
@@ -22,8 +28,16 @@ Enter the provider directory and build the provider
 
 ```sh
 $ cd $GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr
-$ make build
+$ ./build.sh
 ```
+
+Copy the resulting terraform-provider-autoscalr file in that directory to the terraform plugins directory
+for your terraform workspace located in
+
+```sh
+$TERRAFORM_WKSP/terraform.d/plugins/{ARCH}/
+```
+
 
 Using the provider
 ----------------------

@@ -1,14 +1,14 @@
 package autoscalr
 
 import (
-	"errors"
-	"fmt"
-	"math/rand"
-	"time"
 	"bytes"
 	"encoding/json"
+	"errors"
+	"fmt"
 	"github.com/hashicorp/terraform/helper/schema"
+	"math/rand"
 	"net/http"
+	"time"
 )
 
 type AppDef struct {
@@ -294,7 +294,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 	if respCode > 0 {
 		//log.Println("respBody:" + respBody)
 		if respCode == 200 {
-			if (app.AutoScalingGroupName == autoScalingGroupName) {
+			if app.AutoScalingGroupName == autoScalingGroupName {
 				// resource still exists, update values to returned values
 				d.Set("instance_types", app.InstanceTypes)
 				d.Set("scale_mode", app.ScaleMode)
