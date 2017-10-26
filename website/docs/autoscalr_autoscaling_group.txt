@@ -1,0 +1,27 @@
+AutoScalr Provider
+
+Attributes for autoscalr_autoscaling_group resource:
+
+Attribute Name                      Req/Opt     Default     Description
+
+aws_autoscaling_group_name          required                Name of AWS autoscaling group (ASG) to extend
+display_name                        optional                Short name to be used in AutoScalr web UI display
+aws_region                          required                Region AWS autoscaling group to extend is in
+instance_types                      required                Instance types to use
+scale_mode                          optional      cpu       Values: cpu, queue, ecs.
+target_spare_cpu_percent            optional      20        Target spare cpu percentage to scale to, e.g. 20% spare capacity = 80% cpu utilization
+max_spot_percent_total              optional      80        Maximum percentage of capacity to allow in Spot instances
+max_spot_percent_one_market         optional      20        Maximum percentage of capacity to allow in a single Spot market
+detailed_monitoring_enabled         optional      true      Enables AWS per minute metrics which improves scaling decisions
+os_family                           optional   Linux/UNIX   Values: Linux/Unix, SUSE Linux, Windows
+max_hours_instance_age              optional                When set, AutoScalr will schedule instance replacement if age exceeds this setting
+autoscalr_enabled                   optional      true      Flag to quickly allow disabling AutoScalr actions temporarily if desired
+
+For scale_mode = ecs
+cluster_name                        optional                If ASG is supporting an ECS cluster, putting the cluster name here turns on additional optimizations
+target_spare_memory_percent         optional                Target spare memory percentage to scale to.  Only applicable with ecs scale_mode.
+
+For scale_mode = queue
+queue_name                          optional                SQS Queue name to use for scaling input. Only applicable with queue scale_mode.
+target_queue_size                   optional                Target queue size to scale to. Should be non-zero for efficient scaling.
+max_minutes_to_target_queue_size    optional      60        Number of minutes to return to target queue size.  Lower values will trigger more aggressive scaling up to reach size faster.
