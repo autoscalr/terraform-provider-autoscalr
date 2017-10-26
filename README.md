@@ -41,7 +41,6 @@ $TERRAFORM_WKSP/terraform.d/plugins/{ARCH}/
 
 Using the provider
 ----------------------
-## terraform-provider-autoscalr
 
 The AutoScalr provider requires that you specify the api_key associated with your AutoScalr account.
 It is recommended to specify it via the environment variable AUTOSCALR_API_KEY.
@@ -53,33 +52,61 @@ provider "autoscalr" {
 
 If you do not know what your API key value is for your account contact support@autoscalr.com.
 
-The example.tf file shows how to use the autoscalr provider to extend an AWS autoscaling group.
-All the attributes available on the resource are documented in website/docs/autoscalr_autoscaling_group.txt
-
-Developing the Provider
----------------------------
-
-If you wish to work on the provider, you'll first need [Go](http://www.golang.org) installed on your machine (version 1.8+ is *required*). You'll also need to correctly setup a [GOPATH](http://golang.org/doc/code.html#GOPATH), as well as adding `$GOPATH/bin` to your `$PATH`.
-
-To compile the provider, run `make build`. This will build the provider and put the provider binary in the `$GOPATH/bin` directory.
+The exampleUse.tf file shows how to use the autoscalr provider to extend an AWS autoscaling group:
 
 ```sh
-$ make bin
-...
-$ $GOPATH/bin/terraform-provider-autoscalr
-...
+provider "aws" {
+  region = "us-east-1"
+}
+provider "autoscalr" {
+  // You either need to specify the api_key here or via the AUTOSCLAR_API_KEY enviroment variable
+  //api_key = "yourKey"
+}
+
+resource "aws_launch_configuration" "test_lc" {
+  name_prefix   = "test-lc-"
+  image_id      = "ami-9700e3fc"
+  instance_type = "t1.micro"
+
+  lifecycle {
+    create_before_destroy = true
+  }
+}
+
+resource "aws_autoscaling_group" "myAppASG" {
+  availability_zones          = ["us-east-1a", "us-east-1b","us-east-1c"]
+  name                        = "myAppASG"
+  max_size                    = 2
+  min_size                    = 0
+  desired_capacity            = 0
+  health_check_grace_period   = 300
+  health_check_type           = "EC2"
+  force_delete                = true
+  launch_configuration        = "${aws_launch_configuration.test_lc.name}"
+  lifecycle {
+    create_before_destroy     = true
+  }
+  suspended_processes         = ["AZRebalance"]
+}
+
+resource "autoscalr_autoscaling_group" "asr4myAppASG" {
+  aws_region                  = "us-east-1"
+  aws_autoscaling_group_name  = "${aws_autoscaling_group.myAppASG.name}"
+  instance_types              = ["c3.large","c3.xlarge"]
+  display_name                = "myFirstAutoScalrApp"
+  max_spot_percent_total      = 85
+  max_spot_percent_one_market = 25
+}
 ```
 
-In order to test the provider, you can simply run `make test`.
+If you copy this file to your Terraform workspace that has the plugin installed and set your AUTOSCLAR_API_KEY via environment
+variable or parameter, you should be able to build the simple example stack by:
 
-```sh
-$ make test
-```
+ ```sh
+ $ terraform init
+ $ terraform plan
+ $ terraform apply
+ ```
 
-In order to run the full suite of Acceptance tests, run `make testacc`.
-
-*Note:* Acceptance tests create real resources, and often cost money to run.
-
-```sh
-$ make testacc
-```
+All the attributes available on the resource are documented in website/docs/autoscalr_autoscaling_group.txt and
+as an example in the allAttributes.tf file.
