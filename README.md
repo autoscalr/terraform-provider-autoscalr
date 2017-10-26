@@ -46,9 +46,11 @@ The AutoScalr provider requires that you specify the api_key associated with you
 It is recommended to specify it via the environment variable AUTOSCALR_API_KEY.
 Alternatively you can specify it as a parameter when initializing the provider in your .tf file as:
 
+```sh
 provider "autoscalr" {
   api_key = "your API key value"
 }
+```
 
 If you do not know what your API key value is for your account contact support@autoscalr.com.
 
@@ -65,7 +67,7 @@ provider "autoscalr" {
 
 resource "aws_launch_configuration" "test_lc" {
   name_prefix   = "test-lc-"
-  image_id      = "ami-9700e3fc"
+  image_id      = "ami-8c1be5f6"  // Base Amazon Linux AMI in us-east-1
   instance_type = "t1.micro"
 
   lifecycle {
@@ -86,7 +88,7 @@ resource "aws_autoscaling_group" "myAppASG" {
   lifecycle {
     create_before_destroy     = true
   }
-  suspended_processes         = ["AZRebalance"]
+  suspended_processes         = ["AZRebalance"]  // Recommended to keep ASG from fighting AutoScalr AZ Rebalancing
 }
 
 resource "autoscalr_autoscaling_group" "asr4myAppASG" {

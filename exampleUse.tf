@@ -8,7 +8,7 @@ provider "autoscalr" {
 
 resource "aws_launch_configuration" "test_lc" {
   name_prefix   = "test-lc-"
-  image_id      = "ami-9700e3fc"
+  image_id      = "ami-8c1be5f6" // Base Amazon Linux AMI in us-east-1
   instance_type = "t1.micro"
 
   lifecycle {
@@ -29,7 +29,7 @@ resource "aws_autoscaling_group" "myAppASG" {
   lifecycle {
     create_before_destroy     = true
   }
-  suspended_processes         = ["AZRebalance"]
+  suspended_processes         = ["AZRebalance"] // Recommended to keep ASG from fighting AutoScalr AZ Rebalancing
 }
 
 resource "autoscalr_autoscaling_group" "asr4myAppASG" {
