@@ -102,7 +102,7 @@ func resourceAutoScalrAutoscalingGroup() *schema.Resource {
 			"target_queue_size": &schema.Schema{
 				Type:     schema.TypeInt,
 				Optional: true,
-				Default:  10,
+				Default:  1000,
 			},
 			"max_minutes_to_target_queue_size": &schema.Schema{
 				Type:     schema.TypeInt,
