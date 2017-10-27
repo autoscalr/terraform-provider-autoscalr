@@ -9,7 +9,7 @@ Requirements
 -	[Terraform](https://www.terraform.io/downloads.html) 0.10.x
 -	[Go](https://golang.org/doc/install) 1.9 (to build the provider plugin)
 
-Building The Provider
+Downloading The Provider
 ---------------------
 
 Clone repository to: `$GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr` by either:
@@ -24,7 +24,10 @@ or
 $ git clone git@github.com:autoscalr/terraform-provider-autoscalr $GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr
 ```
 
-Enter the provider directory and build the provider
+Building The Provider
+---------------------
+
+Enter the provider directory and run the build script to build the provider for your architecture
 
 ```sh
 $ cd $GOPATH/src/github.com/autoscalr/terraform-provider-autoscalr
