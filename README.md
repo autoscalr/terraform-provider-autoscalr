@@ -115,5 +115,5 @@ variable or parameter, you should be able to build the simple example stack by:
  $ terraform apply
  ```
 
-All the attributes available on the resource are documented in website/docs/autoscalr_autoscaling_group.txt and
-as an example in the allAttributes.tf file.
+All the attributes available on the resource are documented [here](https://github.com/autoscalr/terraform-provider-autoscalr/blob/master/website/docs/autoscalr_autoscaling_group.md) (website/docs/)
+
