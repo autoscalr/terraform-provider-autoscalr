@@ -29,6 +29,7 @@ type AppDef struct {
 	AutoscalrEnabled            bool     `json:"autoscalr_enabled"`
 	OsFamily                    string   `json:"os_family"`
 	MaxHoursInstanceAge         int      `json:"max_hours_instance_age"`
+	TargetCapacity		        int      `json:"target_capacity"`
 }
 
 type AutoScalrRequest struct {
@@ -134,6 +135,11 @@ func resourceAutoScalrAutoscalingGroup() *schema.Resource {
 				Optional: true,
 				Default:  0,
 			},
+			"target_capacity": &schema.Schema{
+				Type:     schema.TypeInt,
+				Optional: true,
+				Default:  1,
+			},
 		},
 	}
 }
@@ -186,6 +192,7 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 	autoscalrEnabled := d.Get("autoscalr_enabled").(bool)
 	osFamily := d.Get("os_family").(string)
 	maxHoursInstanceAge := d.Get("max_hours_instance_age").(int)
+	targetCapacity := d.Get("target_capacity").(int)
 
 	config := meta.(*Config)
 
@@ -210,6 +217,7 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 			AutoscalrEnabled:            autoscalrEnabled,
 			OsFamily:                    osFamily,
 			MaxHoursInstanceAge:         maxHoursInstanceAge,
+			TargetCapacity:         	 targetCapacity,
 		},
 	}
 	resId := fmt.Sprintf("%s:%s", autoScalingGroupName, awsRegion)
@@ -243,6 +251,7 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	autoscalrEnabled := d.Get("autoscalr_enabled").(bool)
 	osFamily := d.Get("os_family").(string)
 	maxHoursInstanceAge := d.Get("max_hours_instance_age").(int)
+	targetCapacity := d.Get("target_capacity").(int)
 
 	config := meta.(*Config)
 
@@ -267,6 +276,7 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 			AutoscalrEnabled:            autoscalrEnabled,
 			OsFamily:                    osFamily,
 			MaxHoursInstanceAge:         maxHoursInstanceAge,
+			TargetCapacity:         	 targetCapacity,
 		},
 	}
 	resId := fmt.Sprintf("%s:%s", autoScalingGroupName, awsRegion)
@@ -311,6 +321,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 				d.Set("autoscalr_enabled", app.AutoscalrEnabled)
 				d.Set("os_family", app.OsFamily)
 				d.Set("max_hours_instance_age", app.MaxHoursInstanceAge)
+				d.Set("target_capacity", app.TargetCapacity)
 			} else {
 				// resource must have been deleted out of band
 				// Set id to tell terraform
@@ -345,6 +356,7 @@ func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 	autoscalrEnabled := d.Get("autoscalr_enabled").(bool)
 	osFamily := d.Get("os_family").(string)
 	maxHoursInstanceAge := d.Get("max_hours_instance_age").(int)
+	targetCapacity := d.Get("target_capacity").(int)
 
 	config := meta.(*Config)
 
@@ -369,6 +381,7 @@ func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 			AutoscalrEnabled:            autoscalrEnabled,
 			OsFamily:                    osFamily,
 			MaxHoursInstanceAge:         maxHoursInstanceAge,
+			TargetCapacity:         	 targetCapacity,
 		},
 	}
 	resId := fmt.Sprintf("%s:%s", autoScalingGroupName, awsRegion)

@@ -25,3 +25,6 @@ For scale_mode = queue
 queue_name                          optional                SQS Queue name to use for scaling input. Only applicable with queue scale_mode.
 target_queue_size                   optional     1000       Target queue size to scale to. Should be non-zero for efficient scaling.
 max_minutes_to_target_queue_size    optional      60        Number of minutes to return to target queue size.  Lower values will trigger more aggressive scaling up to reach size faster.
+
+For scale_mode = fixed
+target_capacity                     required                The fixed number of vCpus AutoScalr should maintain

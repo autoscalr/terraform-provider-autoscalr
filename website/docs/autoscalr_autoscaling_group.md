@@ -46,3 +46,7 @@ The following arguments are also supported when scale_mode is queue:
 * `target_queue_size` - (Optional, Default: 1000) Target queue size to scale to. Should be non-zero for efficient scaling
 * `max_minutes_to_target_queue_size` - (Optional, Default: 1000) Number of minutes to return to target queue size.  Lower values will trigger more aggressive scaling up to reach size faster.
 
+The following arguments are also supported when scale_mode is fixed:
+
+* `target_capacity` - (Required) The fixed number of vCpus AutoScalr should maintain
+
