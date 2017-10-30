@@ -32,6 +32,11 @@ type AppDef struct {
 	TargetCapacity		        int      `json:"target_capacity"`
 }
 
+type AsrApiError struct {
+	ErrorMessage    string  `json:"errorMessage"`
+	ErrorType 		string  `json:"errorType"`
+}
+
 type AutoScalrRequest struct {
 	AsrToken    string  `json:"api_key"`
 	RequestType string  `json:"request_type"`
@@ -157,8 +162,17 @@ func makeApiCall(d *schema.ResourceData, meta interface{}, asrReq *AutoScalrRequ
 	if resp != nil {
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {
-			json.NewDecoder(resp.Body).Decode(app)
-			d.SetId(resId)
+			// Check for error response json
+			jsonErr := new(AsrApiError)
+			json.NewDecoder(resp.Body).Decode(jsonErr)
+			if jsonErr.ErrorType != "" || jsonErr.ErrorMessage != "" {
+				// error response
+				err = errors.New(fmt.Sprintf("Error response: %s", jsonErr.ErrorMessage))
+			} else {
+				// looks like good response
+				json.NewDecoder(resp.Body).Decode(app)
+				d.SetId(resId)
+			}
 			return resp.StatusCode, app, err
 		} else {
 			err = errors.New(fmt.Sprintf("AutoScalr API returned: %s", resp.Status))

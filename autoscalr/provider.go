@@ -4,6 +4,7 @@ import (
 	"github.com/hashicorp/terraform/helper/schema"
 	"github.com/hashicorp/terraform/terraform"
 	"os"
+	"fmt"
 )
 
 type Config struct {
@@ -39,7 +40,10 @@ func providerConfigure(d *schema.ResourceData) (interface{}, error) {
 	if api_key == "" {
 		api_key = os.Getenv("AUTOSCALR_API_KEY")
 	}
-
+	if (len(api_key) < 1) {
+		err := fmt.Errorf("AUTOSCALR_API_KEY environment variable must be set or api_key must be set in provider.")
+		return nil, err
+	}
 	config := Config{
 		apiUrl:    "https://app.autoscalr.com/api/autoScalrApp",
 		AccessKey: api_key,
