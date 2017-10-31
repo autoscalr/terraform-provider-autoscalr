@@ -17,8 +17,8 @@ resource "aws_launch_configuration" "test_lc" {
 }
 
 resource "aws_autoscaling_group" "myAppASG" {
+  name_prefix                 = "test-asg-"
   availability_zones          = ["us-east-1a", "us-east-1b","us-east-1c"]
-  name                        = "myAppASG"
   max_size                    = 2
   min_size                    = 0
   desired_capacity            = 0
