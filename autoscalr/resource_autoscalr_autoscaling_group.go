@@ -32,15 +32,19 @@ type AppDef struct {
 	TargetCapacity		        int      `json:"target_capacity"`
 }
 
-type AsrApiError struct {
-	ErrorMessage    string  `json:"errorMessage"`
-	ErrorType 		string  `json:"errorType"`
-}
-
 type AutoScalrRequest struct {
 	AsrToken    string  `json:"api_key"`
 	RequestType string  `json:"request_type"`
 	AsrAppDef   *AppDef `json:"autoscalr_app_def"`
+}
+
+type AsrApiError struct {
+	ErrorMessage    	string  `json:"errorMessage"`
+	Code 	 	string  `json:"code"`
+}
+
+type AsrApiErrorResponse struct {
+	Error    *AsrApiError  `json:"error"`
 }
 
 func init() {
@@ -162,20 +166,24 @@ func makeApiCall(d *schema.ResourceData, meta interface{}, asrReq *AutoScalrRequ
 	if resp != nil {
 		defer resp.Body.Close()
 		if resp.StatusCode == 200 {
+			// make 2 copies of response, one for error decoding and one for good response
+			respBuf := new(bytes.Buffer)
+			respBuf.ReadFrom(resp.Body)
+			errBuf := bytes.NewBuffer(respBuf.Bytes())
 			// Check for error response json
-			jsonErr := new(AsrApiError)
-			json.NewDecoder(resp.Body).Decode(jsonErr)
-			if jsonErr.ErrorType != "" || jsonErr.ErrorMessage != "" {
+			jsonErr := new(AsrApiErrorResponse)
+			json.NewDecoder(errBuf).Decode(jsonErr)
+			if jsonErr.Error != nil && jsonErr.Error.ErrorMessage != ""  {
 				// error response
-				err = errors.New(fmt.Sprintf("Error response: %s", jsonErr.ErrorMessage))
+				err = errors.New(fmt.Sprintf("Error response: %s", jsonErr.Error.ErrorMessage))
 			} else {
 				// looks like good response
-				json.NewDecoder(resp.Body).Decode(app)
+				json.NewDecoder(respBuf).Decode(app)
 				d.SetId(resId)
 			}
 			return resp.StatusCode, app, err
 		} else {
-			err = errors.New(fmt.Sprintf("AutoScalr API returned: %s", resp.Status))
+			err = errors.New(fmt.Sprintf("AutoScalr API returned: %d", resp.Status))
 			return resp.StatusCode, app, err
 		}
 	} else {
@@ -238,7 +246,7 @@ func resourceCreate(d *schema.ResourceData, meta interface{}) error {
 
 	respCode, _, err := makeApiCall(d, meta, body, resId)
 	if respCode > 400 {
-		err = fmt.Errorf("AutoScalr API returned status code:%d \n %s", respCode)
+		err = fmt.Errorf("AutoScalr API returned status code: %d", respCode)
 	}
 	return err
 }
@@ -296,7 +304,7 @@ func resourceUpdate(d *schema.ResourceData, meta interface{}) error {
 	resId := fmt.Sprintf("%s:%s", autoScalingGroupName, awsRegion)
 	respCode, _, err := makeApiCall(d, meta, body, resId)
 	if respCode > 400 {
-		err = fmt.Errorf("AutoScalr API returned status code:%d \n %s", respCode)
+		err = fmt.Errorf("AutoScalr API returned status code: %d", respCode)
 	}
 	return err
 }
@@ -342,7 +350,7 @@ func resourceRead(d *schema.ResourceData, meta interface{}) error {
 				d.SetId("")
 			}
 		} else {
-			err = fmt.Errorf("AutoScalr API returned status code:%d \n %s", respCode)
+			err = fmt.Errorf("AutoScalr API returned status code: %d", respCode)
 		}
 	}
 	return err
@@ -402,7 +410,7 @@ func resourceDelete(d *schema.ResourceData, meta interface{}) error {
 
 	respCode, _, err := makeApiCall(d, meta, body, resId)
 	if respCode > 400 {
-		err = fmt.Errorf("AutoScalr API returned status code:%d \n %s", respCode)
+		err = fmt.Errorf("AutoScalr API returned status code: %d", respCode)
 	}
 	return err
 }
